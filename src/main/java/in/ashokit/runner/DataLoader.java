@@ -17,9 +17,13 @@ public class DataLoader implements ApplicationRunner {
 	
 	@Autowired
 	private CitizenPlanRepo repo;
+	
+	
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		
+		repo.deleteAll();
 		//CASH PLAN DATA
 		CitizenPlan c1 = new CitizenPlan();
 		c1.setCitizenName("Hitesh");

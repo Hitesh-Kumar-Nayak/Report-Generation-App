@@ -2,6 +2,8 @@ package in.ashokit.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,31 @@ public class ReportController {
 
 	@Autowired
 	private ReportService service;
+	
+	@GetMapping("/pdf")
+	public void pdfExport(HttpServletResponse response) throws Exception {
+		
+		response.setContentType("application/pdf");
+		
+		response.addHeader("Content-Disposition", "attachment;filename=plans.pdf");
+		
+		service.exportPdf(response);
+		
+	}
+	
+	@GetMapping("/excel")
+	public void excelExport(HttpServletResponse response,Model model ) throws Exception {
+		
+		response.setContentType("application/octet-stream");
+		
+		response.addHeader("Content-Disposition", "attachment;filename=plans.xls");
+		
+		boolean status = service.exportExcel(response);
+		if(status) {
+			model.addAttribute("msg", "Excel Report Sent To Your Email");
+		}
+		
+	}
 
 	@PostMapping("/search")
 	public String handleSearch(@ModelAttribute("search")SearchRequest search, Model model) {
